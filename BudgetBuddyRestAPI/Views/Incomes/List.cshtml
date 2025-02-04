@@ -1,0 +1,54 @@
+﻿@model List<BudgetBuddyRestAPI.Models.Entities.Income>
+
+<h1 class="my-4">Income List</h1>
+
+<div class="alert alert-info">
+    <strong>Total Income:</strong>
+    @Model.Sum(income => income.Amount).ToString("C")
+</div>
+
+<div class="mb-4">
+    <a class="btn btn-primary" asp-controller="Incomes" asp-action="Add">
+        <i class="bi bi-plus-circle"></i> Add Income
+    </a>
+</div>
+
+@if (Model.Any())
+{
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Category</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var income in Model)
+            {
+                <tr>
+                    <td>@income.Id</td>
+                    <td>@income.Name</td>
+                    <td>@income.Category</td>
+                    <td>@income.Amount.ToString("C")</td>
+                    <td>
+                        <form method="post" asp-controller="Incomes" asp-action="Delete" class="d-inline">
+                            <input type="hidden" name="Id" value="@income.Id" />
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this income?');">
+                                <i class="bi bi-trash"></i> Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-warning">
+        <i class="bi bi-exclamation-triangle"></i> No income records found. Add your first income using the button above.
+    </div>
+}
